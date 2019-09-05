@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="MySQL,">
+  <meta name="keywords" content="并发,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="1.数据库的四个特性及含义ACID（原子性，一致性，隔离性，持久性） 2.drop，delete，truncate有什么区别drop：直接删除表，包括数据和结构delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容">
-<meta name="keywords" content="MySQL">
+<meta name="description" content="synchronized关键字详解synchronized介绍 synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。">
+<meta name="keywords" content="并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL常见面试题">
-<meta property="og:url" content="http://yoursite.com/2019/08/31/MySQL常见面试题/index.html">
+<meta property="og:title" content="java中的锁机制">
+<meta property="og:url" content="http://yoursite.com/2019/09/05/java中的锁机制/index.html">
 <meta property="og:site_name" content="小涛的博客">
-<meta property="og:description" content="1.数据库的四个特性及含义ACID（原子性，一致性，隔离性，持久性） 2.drop，delete，truncate有什么区别drop：直接删除表，包括数据和结构delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容">
+<meta property="og:description" content="synchronized关键字详解synchronized介绍 synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-31T02:28:44.530Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/05/java中的锁机制/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7.png">
+<meta property="og:updated_time" content="2019-09-05T01:47:13.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL常见面试题">
-<meta name="twitter:description" content="1.数据库的四个特性及含义ACID（原子性，一致性，隔离性，持久性） 2.drop，delete，truncate有什么区别drop：直接删除表，包括数据和结构delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容">
+<meta name="twitter:title" content="java中的锁机制">
+<meta name="twitter:description" content="synchronized关键字详解synchronized介绍 synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/05/java中的锁机制/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7.png">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/31/MySQL常见面试题/">
+  <link rel="canonical" href="http://yoursite.com/2019/09/05/java中的锁机制/">
 
 
 
 
 
-  <title>MySQL常见面试题 | 小涛的博客</title>
+  <title>java中的锁机制 | 小涛的博客</title>
   
 
 
@@ -273,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/31/MySQL常见面试题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/java中的锁机制/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="xiao Tao">
@@ -290,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">MySQL常见面试题</h1>
+          <h1 class="post-title" itemprop="name headline">java中的锁机制</h1>
         
 
         <div class="post-meta">
@@ -302,8 +304,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-31T09:46:38+08:00">
-                2019-08-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-05T09:21:01+08:00">
+                2019-09-05
               </time>
             
 
@@ -312,28 +314,6 @@
             
           </span>
 
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/面试题/" itemprop="url" rel="index">
-                    <span itemprop="name">面试题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -362,33 +342,56 @@
       
 
       
-        <h3 id="1-数据库的四个特性及含义"><a href="#1-数据库的四个特性及含义" class="headerlink" title="1.数据库的四个特性及含义"></a>1.数据库的四个特性及含义</h3><p>ACID（原子性，一致性，隔离性，持久性）</p>
-<h3 id="2-drop，delete，truncate有什么区别"><a href="#2-drop，delete，truncate有什么区别" class="headerlink" title="2.drop，delete，truncate有什么区别"></a>2.drop，delete，truncate有什么区别</h3><p>drop：直接删除表，包括数据和结构<br>delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚<br>truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容</p>
+        <h3 id="synchronized关键字详解"><a href="#synchronized关键字详解" class="headerlink" title="synchronized关键字详解"></a>synchronized关键字详解</h3><h4 id="synchronized介绍"><a href="#synchronized介绍" class="headerlink" title="synchronized介绍"></a>synchronized介绍</h4><blockquote>
+<p>synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。</p>
 <a id="more"></a>
-<h3 id="3-索引的工作原理和种类"><a href="#3-索引的工作原理和种类" class="headerlink" title="3.索引的工作原理和种类"></a>3.索引的工作原理和种类</h3><pre><code>索引的实现通常有B树和B+树；
-数据库系统维护着满足特定查找算法的数据结构，这些数据结构以某种方式引用数据，这样就可    以在这些数据结构之上实现高级查找算法，这种数据结构成为索引；
-通过创建唯一性索引可以保证数据表中每一行数据的唯一性
-可以大大加快数据的检索速度
-可以加速表和表之间的连接
-在使用group by 和order by的时候可以显著降低时间
-创建和维护索引需要耗费时间
-索引需要占据一定的物理空间，聚簇索引需要的空间更大
-对表中数据的增删改素银也需要动态的维护，降低了数据的维护速度
-为表定义主键的时候会自动创建主键索引，这是一种特殊的唯一性索引，他还允许对数据的快速访问；
-InnoDB使用的是聚集索引，即要求表必须有一个主键，然后主键索引的B+树结构中叶子节点不再是存储数据行记录的地址而是直接存储数据行，辅助索引的叶子结点存储的是主键的值。
-MyIsam使用的是非聚集索引，叶子结点存储的是数据表行记录的地址，索引和数据分开存储。</code></pre><h3 id="4-数据库范式"><a href="#4-数据库范式" class="headerlink" title="4.数据库范式"></a>4.数据库范式</h3><p>第一范式：数据库表的每一列都是不可分割的基本数据项，同一列中不能有多个值<br>第二范式：要求每一行的属性完全依赖于主关键字<br>第三范式：属性不依赖于其他非主属性的关键字，消除冗余</p>
-<h3 id="5-数据库优化思路"><a href="#5-数据库优化思路" class="headerlink" title="5.数据库优化思路"></a>5.数据库优化思路</h3><h4 id="（1）SQL优化"><a href="#（1）SQL优化" class="headerlink" title="（1）SQL优化"></a>（1）SQL优化</h4><p>尽量避免在where后面使用!=或者&lt;&gt;判断，否则引擎将放弃索引进行全表扫描；<br>避免在where子句中对字段进行null值判断；<br>很多时候用exists代替in是个好的选择；<br>使用where代替having子句，因为having是先检索然后进行筛选；</p>
-<h4 id="（2）索引优化"><a href="#（2）索引优化" class="headerlink" title="（2）索引优化"></a>（2）索引优化</h4><h4 id="（3）数据库结构优化"><a href="#（3）数据库结构优化" class="headerlink" title="（3）数据库结构优化"></a>（3）数据库结构优化</h4><h3 id="6-MySQL的锁"><a href="#6-MySQL的锁" class="headerlink" title="6.MySQL的锁"></a>6.MySQL的锁</h3><h4 id="对于MyISAM的表锁："><a href="#对于MyISAM的表锁：" class="headerlink" title="对于MyISAM的表锁："></a>对于MyISAM的表锁：</h4><ul>
-<li>共享读锁（S）之间是兼容的，但共享读锁（S）与排他写锁（X）之间，以及排他写锁（X）之间是互斥的，也就是说读和写是串行的。 </li>
-<li>在一定条件下，MyISAM允许查询和插入并发执行，我们可以利用这一点来解决应用中对同一表查询和插入的锁争用问题。 </li>
-<li>MyISAM默认的锁调度机制是写优先，这并不一定适合所有应用，用户可以通过设置LOW_PRIORITY_UPDATES参数，或在INSERT、UPDATE、DELETE语句中指定LOW_PRIORITY选项来调节读写锁的争用。 </li>
-<li>由于表锁的锁定粒度大，读写之间又是串行的，因此，如果更新操作较多，MyISAM表可能会出现严重的锁等待，可以考虑采用InnoDB表来减少锁冲突。<h4 id="对于InnoDB表："><a href="#对于InnoDB表：" class="headerlink" title="对于InnoDB表："></a>对于InnoDB表：</h4></li>
-<li>InnoDB的行锁是基于索引实现的，如果不通过索引访问数据，InnoDB会使用表锁。 </li>
-<li>介绍了InnoDB间隙锁（Next-key)机制，以及InnoDB使用间隙锁的原因。 </li>
-<li>在不同的隔离级别下，InnoDB的锁机制和一致性读策略不同。</li>
-<li>在了解InnoDB锁特性后，用户可以通过设计和SQL调整等措施减少锁冲突和死锁，包括：<br>  (1)尽量使用较低的隔离级别； 精心设计索引，并尽量使用索引访问数据，使加锁更精确，从而减少锁冲突的机会；<br>  (2)选择合理的事务大小，小事务发生锁冲突的几率也更小；<br>  (3)给记录集显式加锁时，最好一次性请求足够级别的锁。比如要修改数据的话，最好直接申请排他锁，而不是先申请共享锁，修改时再请求排他锁，这样容易产生死锁；<br>  (4)不同的程序访问一组表时，应尽量约定以相同的顺序访问各表，对一个表而言，尽可能以固定的顺序存取表中的行。这样可以大大减少死锁的机会；<br>  (5)尽量用相等条件访问数据，这样可以避免间隙锁对并发插入的影响； 不要申请超过实际需要的锁级别；除非必须，查询时不要显示加锁；<br>  (6)对于一些特定的事务，可以使用表锁来提高处理速度或减少死锁的可能。</li>
-</ul>
+</blockquote>
+<h4 id="java中对象锁是什么"><a href="#java中对象锁是什么" class="headerlink" title="java中对象锁是什么"></a>java中对象锁是什么</h4><blockquote>
+<p>首先，我们要知道锁究竟是个什么东西，java中每个对象都是有锁的，我们称为对象的<strong>同步监视器</strong>。这个锁信息就记录在对象的头信息中。我们知道java对象的头信息中主要有两个，一个是markword，即存储对象自身的运行时数据，如HashCode、GC分代年龄、锁状态标志、线程持有的锁等等，另一个是Klass类型指针，即对象指向他的类元数据的指针，虚拟机通过这个指针来确定对象属于哪个类的实例。如果是数组对象，对象头中还会存储数据的长度。</p>
+</blockquote>
+<h5 id="markword的存储结构"><a href="#markword的存储结构" class="headerlink" title="markword的存储结构"></a>markword的存储结构</h5><p>markword中存储的内容会随着当前对象的锁状态变化而变化，JVM提供的对象的锁状态一共有五种：</p>
+<table>
+    <tr>
+        <td colspan="5">Mark Word</td>
+        <td>锁状态</td>
+    </tr>
+    <tr>
+        <td colspan="2">hashcode</td>
+        <td>分代年龄</td>
+        <td>biased_lock:0</td>
+        <td>lock:01</td>
+        <td>正常无锁</td>
+    </tr>
+    <tr>
+        <td>偏向锁线程id</td>
+        <td>epoch(偏向锁时间戳)</td>
+        <td>分代年龄</td>
+        <td>biased_lock:1</td>
+        <td>lock:01</td>
+        <td>偏向锁</td>
+    </tr>
+    <tr>
+        <td colspan="4">线程栈中锁记录的指针</td>
+        <td>lock:00</td>
+        <td>轻量级锁</td>
+    </tr>
+    <tr>
+        <td colspan="4">指向重量级锁Monitor的指针</td>
+        <td>lock:10</td>
+        <td>重量级锁</td>
+    </tr>
+    <tr>
+        <td colspan="4">空</td>
+        <td>lock:11</td>
+        <td>GC标记</td>
+    </tr>
+</table>
 
+<h5 id="锁类型和锁升级"><a href="#锁类型和锁升级" class="headerlink" title="锁类型和锁升级"></a>锁类型和锁升级</h5><h6 id="1-偏向锁"><a href="#1-偏向锁" class="headerlink" title="(1).偏向锁"></a>(1).偏向锁</h6><blockquote>
+<p>大多数情况下，锁是不存在多线程竞争关系的，而总是由同一个线程多次获得，为了让线程获取锁的代价更低而引入了偏向锁的概念。当一个线程访问同步代码块并获得锁的时候，会在对象头和栈帧中的锁记录里存储锁偏向的线程ID，以后该线程再次执行同步代码块的时候不需要进行CAS操作来加锁和解锁，只需要简单的判断对象的mark word里是否存储着指向当前线程的偏向锁，即线程ID是否是当前线程。如果测试成功说明获取到锁，直接执行同步代码块；如果测试失败，则去判断mark word中偏向锁的标识biased_lock是否为1，如果为1表示当前是偏向锁状态，去尝试使用CAS把对象的偏向锁指向当前自己的线程ID，成功则表示获取到偏向锁，如果失败则会暂停当前持有锁的线程，将这个锁升级为轻量级锁，升级的过程待会再说；如果没有设置为1，认为当前对象处于无锁状态或者已经升级为轻量级锁，尝试使用CAS去竞争锁。</p>
+</blockquote>
+<p><em>偏向锁的升级过程</em>：<br><img src="/2019/09/05/java中的锁机制/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7.png" alt="avater"></p>
+<h6 id="2-轻量级锁"><a href="#2-轻量级锁" class="headerlink" title="(2).轻量级锁"></a>(2).轻量级锁</h6>
       
     </div>
     
@@ -405,7 +408,7 @@ MyIsam使用的是非聚集索引，叶子结点存储的是数据表行记录�
       
         <div class="post-tags">
           
-            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+            <a href="/tags/并发/" rel="tag"># 并发</a>
           
         </div>
       
@@ -418,14 +421,18 @@ MyIsam使用的是非聚集索引，叶子结点存储的是数据表行记录�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2019/08/31/CyclicBarrier篱栅详解/" rel="next" title="CyclicBarrier篱栅详解">
+                <i class="fa fa-chevron-left"></i> CyclicBarrier篱栅详解
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/31/CountDownLatch详解/" rel="prev" title="CountDownLatch详解">
-                CountDownLatch详解 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/05/java中线程的中断机制/" rel="prev" title="java中线程的中断机制">
+                java中线程的中断机制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -560,7 +567,7 @@ MyIsam使用的是非聚集索引，叶子结点存储的是数据表行记录�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-数据库的四个特性及含义"><span class="nav-number">1.</span> <span class="nav-text">1.数据库的四个特性及含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-drop，delete，truncate有什么区别"><span class="nav-number">2.</span> <span class="nav-text">2.drop，delete，truncate有什么区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-索引的工作原理和种类"><span class="nav-number">3.</span> <span class="nav-text">3.索引的工作原理和种类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数据库范式"><span class="nav-number">4.</span> <span class="nav-text">4.数据库范式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-数据库优化思路"><span class="nav-number">5.</span> <span class="nav-text">5.数据库优化思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#（1）SQL优化"><span class="nav-number">5.1.</span> <span class="nav-text">（1）SQL优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（2）索引优化"><span class="nav-number">5.2.</span> <span class="nav-text">（2）索引优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（3）数据库结构优化"><span class="nav-number">5.3.</span> <span class="nav-text">（3）数据库结构优化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-MySQL的锁"><span class="nav-number">6.</span> <span class="nav-text">6.MySQL的锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对于MyISAM的表锁："><span class="nav-number">6.1.</span> <span class="nav-text">对于MyISAM的表锁：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对于InnoDB表："><span class="nav-number">6.2.</span> <span class="nav-text">对于InnoDB表：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized关键字详解"><span class="nav-number">1.</span> <span class="nav-text">synchronized关键字详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized介绍"><span class="nav-number">1.1.</span> <span class="nav-text">synchronized介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java中对象锁是什么"><span class="nav-number">1.2.</span> <span class="nav-text">java中对象锁是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#markword的存储结构"><span class="nav-number">1.2.1.</span> <span class="nav-text">markword的存储结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#锁类型和锁升级"><span class="nav-number">1.2.2.</span> <span class="nav-text">锁类型和锁升级</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-偏向锁"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">(1).偏向锁</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-轻量级锁"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">(2).轻量级锁</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
