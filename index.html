@@ -492,7 +492,7 @@
       
         
           <h3 id="synchronized关键字详解"><a href="#synchronized关键字详解" class="headerlink" title="synchronized关键字详解"></a>synchronized关键字详解</h3><h4 id="synchronized介绍"><a href="#synchronized介绍" class="headerlink" title="synchronized介绍"></a>synchronized介绍</h4><blockquote>
-<p>synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。</p></blockquote>
+<p><code>synchronized</code>关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被<code>synchronized</code>关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。</p></blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/09/05/java中的锁机制/#more" rel="contents">
@@ -617,11 +617,12 @@
       
         
           <h3 id="CyclicBarrier简介"><a href="#CyclicBarrier简介" class="headerlink" title="CyclicBarrier简介"></a>CyclicBarrier简介</h3><p>所谓Cyclic即循环的意思，所谓Barrier即<strong>屏障</strong>的意思。</p>
-<p>所以综合起来，CyclicBarrier指的就是<strong>循环屏障</strong>，虽然这个叫法很奇怪，但是确能很好地表示它的作用。</p>
-<p><em>JDK中对CyclicBarrier的描述是如下：</em></p>
-<pre><code>CyclicBarrier是一个同步辅助类，它允许一组线程相互等待直到所有线程都到达一个公共的屏障点
-在程序中有固定数量的线程，这些线程有时候必须等待彼此，这种情况下，使用CyclicBarrier很有帮助
-这个屏障之所以用循环修饰，是因为在所有的线程释放彼此之后，这个屏障是可以重新使用的。</code></pre><p><strong>总结来讲就是【人满发车】。</strong></p>
+<p>所以综合起来，<code>CyclicBarrier</code>指的就是<strong>循环屏障</strong>，虽然这个叫法很奇怪，但是确能很好地表示它的作用。</p>
+<p><em>JDK中对<code>CyclicBarrier</code>的描述是如下：</em></p>
+<blockquote>
+<p>CyclicBarrier是一个同步辅助类，它允许一组线程相互等待直到所有线程都到达一个公共的屏障点<br>在程序中有固定数量的线程，这些线程有时候必须等待彼此，这种情况下，使用CyclicBarrier很有帮助<br>这个屏障之所以用循环修饰，是因为在所有的线程释放彼此之后，这个屏障是可以重新使用的。</p>
+</blockquote>
+<p><strong>总结来讲就是【人满发车】。</strong></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/08/31/CyclicBarrier篱栅详解/#more" rel="contents">
@@ -767,10 +768,10 @@
 
       
         
-          <h3 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h3><p>CountDownLatch能够使一个或多个线程等待其他线程完成各自的工作后再执行；CountDownLatch是JDK 5+里面闭锁的一个实现。</p>
+          <h3 id="CountDownLatch简介"><a href="#CountDownLatch简介" class="headerlink" title="CountDownLatch简介"></a>CountDownLatch简介</h3><p><code>CountDownLatch</code>能够使一个或多个线程等待其他线程完成各自的工作后再执行；<code>CountDownLatch</code>是JDK 5+里面闭锁的一个实现。</p>
 <p><strong>闭锁【Latch】</strong>:一种同步方法，可以延迟线程的进度直到线程到达某个终点状态。通俗的讲就是，一个闭锁相当于一扇大门，在大门打开之前所有线程都被阻断，一旦大门打开所有线程都将通过，但是一旦大门打开，所有线程都通过了，那么这个闭锁的状态就失效了，门的状态也就不能变了，只能是打开状态。也就是说闭锁的状态是一次性的，它确保在闭锁打开之前所有特定的活动都需要在闭锁打开之后才能完成。</p>
-<p>与CountDownLatch第一次交互是主线程等待其它的线程，主线程必须在启动其它线程后立即调用<strong>await方法</strong>，这样主线程的操作就会在这个方法上阻塞，直到其他线程完成各自的任务。</p>
-<p>其他的N个线程必须引用闭锁对象，因为他们需要通知CountDownLatch对象，他们已经完成了各自的任务，这种机制就是通过<strong>countDown()方法</strong>来完成的。每调用一次这个方法，在构造函数中初始化的count值就减1，所以当N个线程都调用了这个方法count的值等于0，然后主线程就能通过await方法，恢复自己的任务。</p>
+<p>与<code>CountDownLatch</code>第一次交互是主线程等待其它的线程，主线程必须在启动其它线程后立即调用<strong><code>await()</code>方法</strong>，这样主线程的操作就会在这个方法上阻塞，直到其他线程完成各自的任务。</p>
+<p>其他的N个线程必须引用闭锁对象，因为他们需要通知<code>CountDownLatch</code>对象，他们已经完成了各自的任务，这种机制就是通过<strong><code>countDown()</code>方法</strong>来完成的。每调用一次这个方法，在构造函数中初始化的count值就减1，所以当N个线程都调用了这个方法count的值等于0，然后主线程就能通过await方法，恢复自己的任务。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/08/31/CountDownLatch详解/#more" rel="contents">
@@ -916,8 +917,8 @@
 
       
         
-          <h3 id="1-数据库的四个特性及含义"><a href="#1-数据库的四个特性及含义" class="headerlink" title="1.数据库的四个特性及含义"></a>1.数据库的四个特性及含义</h3><p>ACID（原子性，一致性，隔离性，持久性）</p>
-<h3 id="2-drop，delete，truncate有什么区别"><a href="#2-drop，delete，truncate有什么区别" class="headerlink" title="2.drop，delete，truncate有什么区别"></a>2.drop，delete，truncate有什么区别</h3><p>drop：直接删除表，包括数据和结构<br>delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚<br>truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容</p>
+          <h3 id="数据库的四个特性及含义"><a href="#数据库的四个特性及含义" class="headerlink" title="数据库的四个特性及含义"></a>数据库的四个特性及含义</h3><p>ACID（原子性，一致性，隔离性，持久性）</p>
+<h3 id="drop，delete，truncate有什么区别"><a href="#drop，delete，truncate有什么区别" class="headerlink" title="drop，delete，truncate有什么区别"></a>drop，delete，truncate有什么区别</h3><p>drop：直接删除表，包括数据和结构<br>delete：删除表中的记录，并且删除操作会作为日志保存下来方便事务的回滚<br>truncate：清空表的内容，没有日志记录，无法删除带有外键约束的表内容</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2019/08/31/MySQL常见面试题/#more" rel="contents">
