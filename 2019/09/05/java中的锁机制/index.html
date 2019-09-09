@@ -88,7 +88,7 @@
 <meta property="og:description" content="synchronized关键字详解synchronized介绍 synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/09/05/java中的锁机制/%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7.png">
-<meta property="og:updated_time" content="2019-09-05T06:23:31.648Z">
+<meta property="og:updated_time" content="2019-09-09T12:59:19.232Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java中的锁机制">
 <meta name="twitter:description" content="synchronized关键字详解synchronized介绍 synchronized关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被synchronized关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。">
@@ -345,8 +345,25 @@
         <h3 id="synchronized关键字详解"><a href="#synchronized关键字详解" class="headerlink" title="synchronized关键字详解"></a>synchronized关键字详解</h3><h4 id="synchronized介绍"><a href="#synchronized介绍" class="headerlink" title="synchronized介绍"></a>synchronized介绍</h4><blockquote>
 <p><code>synchronized</code>关键是是JVM为我们提供的线程同步工具，当一个方法或语句块被<code>synchronized</code>关键字修饰时，执行该方法或者该代码块的线程会去获取要锁定的对象的锁，获取成功才会执行；并且一旦对象的锁被任意一个线程持有时，其他线程获取当前对象的锁都会失败，即具有排他性。</p>
 <a id="more"></a>
+
+<p>synchronized关键字包括<code>monitor enter</code>和<code>monitor exit</code>两个JVM指令，他能够保证在任何时候线程执行到<code>monitor enter</code>成功之前都必须从主内存中获取数据，在执行<code>monitor exit</code>成功之后都必须将变量被更新的值刷到主内存中去；最后，<code>synchronized</code>的指令必须严格的遵守java的<code>happens-before</code>规则，即一个<code>monitor exit</code>指令之前必定要有一个<code>monitor enter</code>指令。</p>
 </blockquote>
-<h4 id="java中对象锁是什么"><a href="#java中对象锁是什么" class="headerlink" title="java中对象锁是什么"></a>java中对象锁是什么</h4><blockquote>
+<h4 id="synchronized关键字的用法"><a href="#synchronized关键字的用法" class="headerlink" title="synchronized关键字的用法"></a>synchronized关键字的用法</h4><p>(1).同步方法(锁定的是当前对象，修饰静态方法时锁定的是静态方法所在类的class对象)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>(2).同步代码块(锁定的是括号中的对象)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Object MUTEX = <span class="keyword">new</span> Object();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">synchronized</span>(MUTEX)&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="synchronized的虚拟机指令"><a href="#synchronized的虚拟机指令" class="headerlink" title="synchronized的虚拟机指令"></a>synchronized的虚拟机指令</h4><p>(1).<code>monitor enter</code></p>
+<p>每一个对象都与一个monitor相关联，一个monitor的lock锁只能被同一个线程在同一时间获得，在一个线程尝试获得与对象相关联的monitor的所有权时会发生以下几件事：</p>
+<ul>
+<li>如果monitor的计数器为0，则意味着该monitor的lock还没有被获得，某个线程获得之后将立即对该计数器加一，从此该线程就是这个monitor的所有者了；</li>
+<li>如果一个已经拥有该monitor所有权的线程重入，则会导致monitor计数器再次加一；</li>
+<li>如果monitor已经被其他线程所拥有，则其他线程尝试获取该monitor的所有权时，会被陷入阻塞状态直到monitor计数器变为0，才能再次尝试获取对monitor的所有权。</li>
+</ul>
+<p>(2).<code>monitor exit</code></p>
+<p>释放对monitor的所有权，想要释放对某个对象相关联的monitor的所有权的前提是你曾经获得了所有权。释放的过程比较简单，就是讲monitor的计数器减一，如果计数器的结果变为0，那么意味着当前线程不再拥有该对象关联的monitor的所有权，即解锁。与此同时，被该monitor block的线程将再次尝试获取对该对象的权限。</p>
+<h3 id="java中的对象锁是什么"><a href="#java中的对象锁是什么" class="headerlink" title="java中的对象锁是什么"></a>java中的对象锁是什么</h3><blockquote>
 <p>首先，我们要知道锁究竟是个什么东西，java中每个对象都是有锁的，我们称为对象的<strong>同步监视器</strong>。这个锁信息就记录在对象的头信息中。我们知道java对象的头信息中主要有两个，一个是markword，即存储对象自身的运行时数据，如HashCode、GC分代年龄、锁状态标志、线程持有的锁等等，另一个是Klass类型指针，即对象指向他的类元数据的指针，虚拟机通过这个指针来确定对象属于哪个类的实例。如果是数组对象，对象头中还会存储数据的长度。</p>
 </blockquote>
 <h5 id="markword的存储结构"><a href="#markword的存储结构" class="headerlink" title="markword的存储结构"></a>markword的存储结构</h5><p>markword中存储的内容会随着当前对象的锁状态变化而变化，JVM提供的对象的锁状态一共有五种：</p>
@@ -583,7 +600,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized关键字详解"><span class="nav-number">1.</span> <span class="nav-text">synchronized关键字详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized介绍"><span class="nav-number">1.1.</span> <span class="nav-text">synchronized介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java中对象锁是什么"><span class="nav-number">1.2.</span> <span class="nav-text">java中对象锁是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#markword的存储结构"><span class="nav-number">1.2.1.</span> <span class="nav-text">markword的存储结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#锁类型和锁升级"><span class="nav-number">1.2.2.</span> <span class="nav-text">锁类型和锁升级</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-偏向锁"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">(1).偏向锁</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-轻量级锁"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">(2).轻量级锁</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized关键字详解"><span class="nav-number">1.</span> <span class="nav-text">synchronized关键字详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized介绍"><span class="nav-number">1.1.</span> <span class="nav-text">synchronized介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized关键字的用法"><span class="nav-number">1.2.</span> <span class="nav-text">synchronized关键字的用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized的虚拟机指令"><span class="nav-number">1.3.</span> <span class="nav-text">synchronized的虚拟机指令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java中的对象锁是什么"><span class="nav-number">2.</span> <span class="nav-text">java中的对象锁是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#markword的存储结构"><span class="nav-number">2.0.1.</span> <span class="nav-text">markword的存储结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#锁类型和锁升级"><span class="nav-number">2.0.2.</span> <span class="nav-text">锁类型和锁升级</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-偏向锁"><span class="nav-number">2.0.2.1.</span> <span class="nav-text">(1).偏向锁</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-轻量级锁"><span class="nav-number">2.0.2.2.</span> <span class="nav-text">(2).轻量级锁</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
