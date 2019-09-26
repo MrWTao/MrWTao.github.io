@@ -87,10 +87,13 @@
 <meta property="og:site_name" content="小涛的博客">
 <meta property="og:description" content="第一部分 java内存模型1.描述一下java内存模型? java虚拟机规范中定义了一种java内存模型JMM用来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让java程序在各种平台下都能达到一致的内存访问效果。 java内存模型的主要目标是定义程序各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-20T14:33:14.636Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F">
+<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/blog/source/_posts/java面试题整理/类加载的过程.png">
+<meta property="og:updated_time" content="2019-09-26T09:20:35.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java面试题整理">
 <meta name="twitter:description" content="第一部分 java内存模型1.描述一下java内存模型? java虚拟机规范中定义了一种java内存模型JMM用来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让java程序在各种平台下都能达到一致的内存访问效果。 java内存模型的主要目标是定义程序各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F">
 
 
 
@@ -379,10 +382,10 @@
 <li>store（存储）：作用于工作内存中的变量，把工作内存中的变量副本的值传递到主内存中以便write操作</li>
 <li>write（写入）：作用于主内存中的变量，把store操作从线程工作内存中得到的变量值放入主内存的变量中</li>
 </ul>
-<p>(3).volatile关键字修饰变量的特殊规则：首先volatile关键字修饰的变量具备两个特点，可见性和有序性。可见性可以保证对volatile变量的修改会被其他线程是立即可见的，其实现方式是线程在使用volatile类型变量的时候会强制让线程工作内存中的变量父辈失效，重新去主存中获取最新的变量的值，我们可以认为volatile修饰的变量在多线程的环境下不存在一致性的问题；volatile变量的第二个语义是禁止指令重排序，指令重排序是CPU对程序代码进行的优化操作，其前提条件是会保证程序执行的最终结果和顺序执行的结果一致。但是这里的重排序所说的数据依赖性只是在单线程环境下，多线程环境下重排序就不能保证数据依赖性了，所以需要使用volatile关键字来实现正确的数据依赖传递。volatile关键字会使用内存屏障来保证数据依赖性。</p>
+<p>(3).volatile关键字修饰变量的特殊规则：首先volatile关键字修饰的变量具备两个特点，可见性和有序性。可见性可以保证对volatile变量的修改会被其他线程是立即可见的，其实现方式是线程在使用volatile类型变量的时候会强制让线程工作内存中的变量副本失效，重新去主存中获取最新的变量的值，我们可以认为volatile修饰的变量在多线程的环境下不存在一致性的问题；volatile变量的第二个语义是禁止指令重排序，指令重排序是CPU对程序代码进行的优化操作，其前提条件是会保证程序执行的最终结果和顺序执行的结果一致。但是这里的重排序所说的数据依赖性只是在单线程环境下，多线程环境下重排序就不能保证数据依赖性了，所以需要使用volatile关键字来实现正确的数据依赖传递。volatile关键字会使用内存屏障来保证数据依赖性。</p>
 <p>内存屏障主要分为两种：Load Barrier和Store Barrier即读屏障和写屏障。</p>
 <blockquote>
-<p>内存屏障会值屏障两侧的指令重排序；</p>
+<p>内存屏障会禁止屏障两侧的指令重排序；</p>
 <p>强制把写缓冲区或高速缓冲区中的脏数据写回主内存，让缓存中相应的数据失效。</p>
 </blockquote>
 <p>volatile的内存屏障策略是非常保守且悲观的：</p>
@@ -490,7 +493,276 @@
 <blockquote>
 <p>对于key为{foo}.student1、{foo}.student2，{foo}student3，这类key一定是在同一个redis节点上。因为key中“{}”之间的字符串就是当前key的hash tags， 只有key中{ }中的部分才被用来做hash，因此计算出来的redis节点一定是同一个!</p>
 </blockquote>
+<h3 id="第三部分-java虚拟机和GC相关"><a href="#第三部分-java虚拟机和GC相关" class="headerlink" title="第三部分 java虚拟机和GC相关"></a>第三部分 java虚拟机和GC相关</h3><h4 id="1-JDK1-8的运行时数据区域？"><a href="#1-JDK1-8的运行时数据区域？" class="headerlink" title="1.JDK1.8的运行时数据区域？"></a>1.JDK1.8的运行时数据区域？</h4><p>相比之前的版本，1.8版本的jdk将永久代取消了，使用元数据区来实现方法区，只不过元数据区的内存分布在本地内存，不属于虚拟机内存区域。</p>
+<blockquote>
+<p>JVM虚拟机数据区域分为java虚拟机栈、程序计数器、本地方法栈和java堆；</p>
+<p>本地内存包括元数据区域和直接内存。</p>
+</blockquote>
+<p>(1).程序计数器</p>
+<p>属于线程私有的部分，指向当前线程正在执行的字节码代码的行号，如果当前线程执行的是本地方法，指向null；</p>
+<p>(2).java虚拟机栈</p>
+<p>线程私有，其生命周期与线程同进退。每个java的方法在调用时会创建一个栈帧并入栈。调用完成的时候出栈，所有的栈帧都出栈之后线程就完成了使用。这里的栈帧包括局部变量表、操作数栈、动态链接和方法出口信息。</p>
+<p>在这个区域虚拟机规定了两种异常状态：</p>
+<ol>
+<li>StackOverFlowError：由于线程请求的栈的深度大于虚拟机允许的深度，将会抛出该异常(常见于递归溢出)</li>
+<li>OutOfMemoryError：如果虚拟机栈可以动态扩展，如果扩展时无法申请到足够的内存空间就会抛出该异常</li>
+</ol>
+<p>(3).本地方法栈</p>
+<p>功能与java虚拟机栈类似，主要用于java代码中使用到的native方法服务。</p>
+<p>(4).java堆</p>
+<p>堆是JVM内存占用最大的部分，管理最复杂的一个区域。其唯一的用途就是用来存放对象实例。并且字符串常量池在1.8以后也被放在了堆中。</p>
+<p>(5).元数据区域metaspace</p>
+<p>取代了1.7以前的永久代，作为虚拟机规范的方法区的实现，存放虚拟机加载的类信息、静态变量、常量等数据。</p>
+<p>(6).直接内存</p>
+<p>NIO使用的内存区域。</p>
+<p><img src="/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F" alt="1569467692660"></p>
+<h4 id="2-垃圾回收的过程是怎样的？"><a href="#2-垃圾回收的过程是怎样的？" class="headerlink" title="2.垃圾回收的过程是怎样的？"></a>2.垃圾回收的过程是怎样的？</h4><p>垃圾回收机制的存在就是为了自动的回收JVM管理的内存区域中不再使用的对象。主要考虑的因素有三个：</p>
+<ol>
+<li>JVM如何确定哪些对象需要被回收？</li>
+<li>JVM会在什么时候进行垃圾回收？</li>
+<li>JVM是怎么回收垃圾对象实例的？</li>
+</ol>
+<p>(1).确定对象是否需要被回收的方式</p>
+<blockquote>
+<p>有两个经典算法：引用计数法和可达性分析法</p>
+</blockquote>
+<ul>
+<li>引用计数法就是判断对象的引用数量。给对象实例添加一个引用计数器，每当有引用时计数器就会+1，取消对该对象的引用时计数器就会-1。如果某个对象的引用计数器为0那么我们可以认为该对象是一个失效的垃圾对象，需要被GC进行回收。</li>
+<li>可达性分析法是通过判断对象的引用连是否可达来确定对象是否需要被回收。从一系列成为GC Roots的对象作为引用链的起点，依次向下搜索。GC Roots对象达不到的对象实例就应该被垃圾收集器回收掉。</li>
+</ul>
+<p>(2).何时进行垃圾回收操作？</p>
+<ol>
+<li>会在CPU空闲的时候自动回收</li>
+<li>会在堆内存满了的时候</li>
+<li>主动调用<code>System.gc()</code>方法(不能保证一定执行垃圾回收)</li>
+</ol>
+<p>(3).如何回收垃圾？</p>
+<blockquote>
+<p>垃圾回收的算法主要有四种：标记-清除算法、复制算法、标记整理算法和分代收集</p>
+</blockquote>
+<ul>
+<li>标记-清除算法</li>
+</ul>
+<p>分为两个阶段，标记阶段会标记处所有需要回收的对象，回收阶段回收掉垃圾对象。</p>
+<p>缺点是：效率比较低，并且清除垃圾对象之后内存空间不连续，会产生很多内存碎片。</p>
+<ul>
+<li>复制算法</li>
+</ul>
+<p>复制算法将可用空间划分为两个相等的区域，只是用其中一个区域，当内存不足时会标记当前区域中还存活的对象然后复制到另一个区域中，然后清除当前区域中的所有数据。</p>
+<p>缺点是：空间利用率低，在对象存活比例很大的情况下复制次数多但不会产生内存碎片。</p>
+<ul>
+<li>标记-整理算法</li>
+</ul>
+<p>标记整理算法在标记清除算法的基础上，将剩余的存活对象进行一个整理，是的不连续的内存空间连续起来。</p>
+<ul>
+<li>分代垃圾回收算法</li>
+</ul>
+<p>这也是现代垃圾收集器使用的主要收集算法。本身并不是一个新的算法，而是将内存区域划分为不同的区域，针对不同的区域选择以上三种算法中的一些进行回收。从垃圾收集的角度我们可以将堆内存划分为新生代、老年代和永久代。在1.8以后不存在永久代了，取而代之的是元数据空间，这一部分空间不在虚拟机的内存管辖区域，所以不会受到垃圾收集器的影响。</p>
+<p>(1).新生代的目标是尽可能快速的收集那些生命周期短的对象，通常情况下所有新生成的对象都会存放在新生代中。默认情况下新生代按照8:1:1的比例划分为Eden区和两个survivor区，大部分对象在Eden区中生成。当Eden区的空间不够用的时候会触发Minor GC，将Eden区剩余的存活对象转移到survivor区的一个中去，然后当第二次Eden区再满的时候将Eden区和存在对象的survivor区中剩余存活对象复制到另一个survivor区中，这样来回倒转两个survivor区。特别情况下，如果survivor区不足以放下Eden区和另一个survivor区中的存活对象时会放入到老年代中。如果老年代也满了会触发一次Full GC。</p>
+<p>(2).老年代存放的都是一些生命周期较长的对象。老年代的内存与新生代的内存比例是2:1的比例，老年代发生的垃圾回收称为Full GC，会暂停虚拟机的所有线程，然后进行垃圾回收。</p>
+<p>注意：这里是只要老年代的连续空间大小大于新生代的大小或者历次晋升老年代的平均大小就不会进行Full GC，而是进行Minor GC。</p>
+<h4 id="3-常见的垃圾回收器和搭配？"><a href="#3-常见的垃圾回收器和搭配？" class="headerlink" title="3.常见的垃圾回收器和搭配？"></a>3.常见的垃圾回收器和搭配？</h4><ul>
+<li><p>Serial收集器</p>
+</li>
+<li><p>ParNew收集器(Serial的多线程版本)</p>
+</li>
+<li><p>Parallel Scavenge收集器(追求吞吐量)</p>
+</li>
+<li><p>Serial Old</p>
+</li>
+<li><p>Parallel Old</p>
+</li>
+<li><p>CMS(并发收集器，追求低停顿)</p>
+</li>
+<li><p>G1收集器(并发收集，可预测停顿时间)</p>
+</li>
+</ul>
+<h4 id="4-类的加载过程是怎样的？"><a href="#4-类的加载过程是怎样的？" class="headerlink" title="4.类的加载过程是怎样的？"></a>4.类的加载过程是怎样的？</h4><blockquote>
+<p>类从被加载到虚拟机内存开始，到卸载出内存位置，它的整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载7个阶段，其中验证、准备、解析3个部分称为连接。</p>
+</blockquote>
+<img src="/2019/09/20/java面试题整理/blog\source\_posts\java面试题整理\类加载的过程.png" alt="1569373730786" style="zoom: 80%;">
 
+<p>首先，虚拟机是如何判断何时该加载类呢，在这里虚拟机规范并没有严格的规定何时加载类，不过对于初始化阶段，则是严格的指出只有5种情况必须立即对类进行初始化：</p>
+<ol>
+<li>遇到new、getstatic、putstatic或invokestatic这四条字节码指令时，如果类没有进行初始化则需要先触发初始化过程。对应到java场景中就是使用new关键字实例化类的对象、读取或设置一个类的静态变量(不能被final修饰)和调用一个类的静态方法的时候；</li>
+<li>使用java.lang.reflect包的方法对类进行反射调用时会触发类的初始化；</li>
+<li>当初始化一个类的时候，如果发现其父类还没有进行初始化，则需要先初始化父类；</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类，虚拟机会先加载这个类；</li>
+<li>当使用jdk1.7的动态语言支持时，如果一个java.lang.invoke.MethodHandle实例最后的解析结果REF_getStatic、REF_putStatic、REF_invokeStatic的方法句柄，并且这个方法句柄所对应的类没有进行初始化，会初始化该类。</li>
+</ol>
+<p>(1).加载：</p>
+<ol>
+<li>通过类的全限定名来获取定义此类的二进制字节流</li>
+<li>将这个类的二进制字节流代表的静态存储结构转化为方法区中的运行时数据结构</li>
+<li>在内存中生成一个代表这个类的java.lang.Class类型的对象，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+<p>(2).验证：</p>
+<ol>
+<li>文件格式验证</li>
+<li>元数据验证</li>
+<li>字节码验证</li>
+<li>符号引用验证</li>
+</ol>
+<p>(3).准备：</p>
+<p>正式为类变量分配内存并设置类变量的默认初始值，这里说的类变量就是静态变量，如果一个变量是静态常量，即被static final同时修饰的并且在编译期间就知道具体的值的，在这个阶段就会赋予最终的值。如果是下面这个类型就不会赋予初始值：<code>public static final int a = new Random().nextInt(10);</code></p>
+<p>(4).解析：</p>
+<p>这个阶段的主要任务是将类中的符号引用转换为直接引用</p>
+<p>(5).初始化：</p>
+<p>为类的静态变量赋予正确的初始值</p>
+<h3 id="第四部分-计算机基础和网络"><a href="#第四部分-计算机基础和网络" class="headerlink" title="第四部分 计算机基础和网络"></a>第四部分 计算机基础和网络</h3><h4 id="1-当在浏览器中输入一个网址之后发生了什么？"><a href="#1-当在浏览器中输入一个网址之后发生了什么？" class="headerlink" title="1.当在浏览器中输入一个网址之后发生了什么？"></a>1.当在浏览器中输入一个网址之后发生了什么？</h4><blockquote>
+<p>当你输入一个网址并按下回车键的时候，首先，应用层协议对该请求包做了格式定义；紧接着传输层协议加上了双方的端口号，确认了双方通信的应用程序；然后网络协议加上了双方的IP地址，确认了双方的网络位置；最后链路层协议加上了双方的MAC地址，确认了双方的物理位置，同时将数据进行分组，形成数据帧，采用广播方式，通过传输介质发送给对方主机。而对于不同网段，该数据包首先会转发给网关路由器，经过多次转发后，最终被发送到目标主机。目标机接收到数据包后，采用对应的协议，对帧数据进行组装，然后再通过一层一层的协议进行解析，最终被应用层的协议解析并交给服务器处理。</p>
+</blockquote>
+<ol>
+<li>浏览器需要解析URL，检测是否合法</li>
+<li>浏览器先查看浏览器缓存-系统缓存-路由器缓存，如果有，会直接在页面中展示内容。若没有进行下一步</li>
+<li>发送HTTP请求前先进行域名解析（DNS解析），解析获取相应的IP地址</li>
+<li>浏览器向服务器发起TCP连接，与服务器建立TCP三次握手</li>
+<li>浏览器在建立的可靠的TCP连接的基础上发送HTTP请求，请求数据包</li>
+<li>服务器处理收到的请求，返回数据包到浏览器</li>
+<li>浏览器收到响应后，如果可以缓存就缓存</li>
+<li>浏览器发送其他HTML相关的资源</li>
+<li>浏览器发送异步请求</li>
+<li>页面渲染结束</li>
+</ol>
+<h4 id="2-TCP连接建立和解除的过程？"><a href="#2-TCP连接建立和解除的过程？" class="headerlink" title="2.TCP连接建立和解除的过程？"></a>2.TCP连接建立和解除的过程？</h4><p>建立连接需要经过三次握手的环节：</p>
+<blockquote>
+<p>第一次握手：建立连接时，客户端发送SYN包(syn=j)，同时自身进入SYN_SEND状态，等待服务器确认；(j是生成的随机的同步序列编号)<br>第二次握手：服务器收到SYN包，确认客户端的SYN(ack=j+1)同时自己也发送一个SYN包(syn=k)，此时服务器进入SYN_ACK状态；<br>第三次握手：客户端收到服务器发送的SYN+ACK包，确认ACK包是j+1然后向服务器放ACK包(ack=k+1)，此包发送完毕进入ESTABLISHED状态完成三次握手。</p>
+</blockquote>
+<p>断开连接需要四次挥手的环节：</p>
+<blockquote>
+<p>第一次挥手：客户端发送链接释放报文，并且终止发送数据。FIN=1，seq=u(等于前面已经传过来的数据的最后一个字节的序号+1)，此时客户端进入FIN-WAIT-1状态；<br>第二次挥手：服务器收到释放报文，发送确认收到报文，ACK=1，ack=u+1，并且带上自己的序列号seq=v，此时服务端进入了CLOSE-WAIT状态。TCP服务器通知高层应用进程客户端向服务器方向不再发送数据了，这个时候处于半关闭状态；<br>第三次挥手：客户端收到服务端的确认请求后，此时客户端进入FIN-WAIT-2状态，等待服务器发送释放连接报文，在此之间服务器发送过来的最后的数据还要接受；<br>服务发送完数据之后向客户单发送链接释放报文，FIN=1，ack=u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq=w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认；<br>第四次挥手：客户端收到服务器的连接释放报文后，必须发出确认，ACK=1，ack=w+1，而自己的序列号是seq=u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2*MSL（最长报文段寿命）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。服务端只要收到了客户端发送的确认，立即进入CLOSED状态，同样，撤销TCB之后就结束了了本次TCP连接。</p>
+</blockquote>
+<p>如果已经建立了连接，客户端出现了故障会如何处理：</p>
+<blockquote>
+<p>TCP还设有一个保活器，服务器没收到一次客户端的请求后会重新复位这个计时器，通常设置为2小时，如果两小时没有收到客户端的任何数据，服务器会发送一个探测报文段，以后每隔75秒钟发送一次。如连续发送10个探测报文段仍然没有反应服务端就认为客户端发生故障了接着就关闭连接。</p>
+</blockquote>
+<h4 id="3-OSI七层协议每一层的功能？"><a href="#3-OSI七层协议每一层的功能？" class="headerlink" title="3.OSI七层协议每一层的功能？"></a>3.OSI七层协议每一层的功能？</h4><ul>
+<li>物理层</li>
+</ul>
+<p>主要定义物理设备标准，如网线的接口类型、光纤的接口类型、各种传输介质的传输速率等；主要作用是传输比特流，即01信号。</p>
+<ul>
+<li>数据链路层【FDDI】</li>
+</ul>
+<p>定义了如何让格式化的数据以进行传输，以及如何让控制对物理介质的访问。</p>
+<ul>
+<li>网络层【IP、ARP、ICMP、RARP、AKP、UUCP】</li>
+</ul>
+<p>在位于不同地理位置的网络中的两个主机系统之间提供链接和路径选择。</p>
+<ul>
+<li>传输层【TCP、UDP】</li>
+</ul>
+<p>定义了一些传输数据的协议和端口号</p>
+<ul>
+<li>会话层【SMTP、DNS】</li>
+</ul>
+<p>通过传输层(传输端口与接收端口)建立数据传输的通路</p>
+<ul>
+<li>表示层【Telnet、Rlogin、SNMP、Gopher】</li>
+</ul>
+<p>可确保一个系统的应用层所发送的信息可以被另一个系统的应用层读取</p>
+<ul>
+<li>应用层【HTTP、TFTP、FTP、NFS、WAIS、SMTP】</li>
+</ul>
+<p>为用户的应用程序提供网络服务</p>
+<h4 id="4-TCP和UDP的区别？"><a href="#4-TCP和UDP的区别？" class="headerlink" title="4.TCP和UDP的区别？"></a>4.TCP和UDP的区别？</h4><table>
+<thead>
+<tr>
+<th align="center">TCP</th>
+<th align="center">UDP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">面向连接</td>
+<td align="center">面向无连接</td>
+</tr>
+<tr>
+<td align="center">首部20字节</td>
+<td align="center">首部8字节</td>
+</tr>
+<tr>
+<td align="center">端到端</td>
+<td align="center">可以一对一或一对多</td>
+</tr>
+<tr>
+<td align="center">字节流传输</td>
+<td align="center">报文传输</td>
+</tr>
+<tr>
+<td align="center">稳定可靠的传输</td>
+<td align="center">不可靠不稳定</td>
+</tr>
+<tr>
+<td align="center">传输效率低，速度慢</td>
+<td align="center">传输效率高，速度快</td>
+</tr>
+</tbody></table>
+<h4 id="5-一次完整的HTTP请求所经历的七个步骤？"><a href="#5-一次完整的HTTP请求所经历的七个步骤？" class="headerlink" title="5.一次完整的HTTP请求所经历的七个步骤？"></a>5.一次完整的HTTP请求所经历的七个步骤？</h4><p>HTTP通信机制是建立在TCP连接基础之上的，是web浏览器和web服务器之间的通信：</p>
+<ol>
+<li>建立TCP连接；</li>
+<li>web浏览器向web服务器发送请求命令；</li>
+<li>web浏览器发送请求头信息；</li>
+<li>web服务器应答web浏览器(协议版本号和状态码HTTP/1.1 200 OK )；</li>
+<li>web服务器发送应答的头信息；</li>
+<li>web服务器向浏览器发送数据；</li>
+<li>web服务器关闭连接或者保持连接等待下次请求。</li>
+</ol>
+<h4 id="6-GET和POST请求的区别？"><a href="#6-GET和POST请求的区别？" class="headerlink" title="6.GET和POST请求的区别？"></a>6.GET和POST请求的区别？</h4><ul>
+<li><p>首先，GET和POST都是发送HTTP请求的方式，从标准上来讲，GET方式用于获取服务器上的数据，无副作用，且可缓存，而POST请求用于修改服务器上的数据，有副作用且不可缓存。</p>
+</li>
+<li><p>从报文上来讲，本质是没有区别的，只是格式不同而已。都是基于TCP/IP的应用层协议，虽然GET的参数携带在URL后面，而POST的参数放在请求实体中，但是这并不是必须的，只要服务器支持，也是可以兼容的，不过从语义上讲不推荐这么做而已。</p>
+</li>
+<li><p>GET和POST的传输过程都是明文在网络上传输，没有谁更安全一说。</p>
+</li>
+<li><p>GET方式的URL长度限制是浏览器或服务器的原因，为了提高性能和防止恶意攻击，限制了URL的长度。</p>
+</li>
+<li><p>POST产生一个还是两个数据包是不一定的，因为HTTP协议并没有规定POST必须先发送header再发送body，分开或者不分开发送不属于POST类型请求的必然行为。</p>
+</li>
+</ul>
+<h4 id="7-HTTP和HTTPS的关系和区别是什么？"><a href="#7-HTTP和HTTPS的关系和区别是什么？" class="headerlink" title="7.HTTP和HTTPS的关系和区别是什么？"></a>7.HTTP和HTTPS的关系和区别是什么？</h4><blockquote>
+<p>HTTP：超文本传输协议是互联网上应用最为广泛的一种网络协议。设计超文本协议的最初目的是为了提供一种发布和接受HTML页面的方法。HTTP协议是以明文的方式发送信息。</p>
+<p>HTTPS：是以安全为目标的HTTP通道。基础是SSL，SSL协议位于TCP/IP协议与各种应用层协议之间，微数据提供安全支持。</p>
+</blockquote>
+<p>HTTP协议的特点：</p>
+<ul>
+<li>无状态：协议对客户端没有状态存储，对事务处理没有记忆能力</li>
+<li>无连接：HTTP/1.1之前由于无状态的特点每次请求都要进行TCP三次握手和四次挥手，需要耗费不必要的时间和流量</li>
+<li>基于请求和响应：基本的特性，由客户端发起请求，服务器响应</li>
+<li>简单灵活、快速</li>
+<li>通信使用明文、请求和响应不会对通信方进行确认、无法保护数据的完整性</li>
+</ul>
+<p>HTTPS协议的特点：</p>
+<ul>
+<li>内容加密：采用混合加密技术，中间这无法直接查看明文内容</li>
+<li>验证身份：通过证书认证机构认证的客户端才能访问自己的服务器</li>
+<li>保护数据的完整性：防止传输的内容被中间人冒充或者篡改</li>
+</ul>
+<h4 id="8-HTTPS实现的原理？"><a href="#8-HTTPS实现的原理？" class="headerlink" title="8.HTTPS实现的原理？"></a>8.HTTPS实现的原理？</h4><blockquote>
+<p>HTTPS要使客户端与服务器端的通信过程得到安全保证，必须使用对称加密算法，但是协商对称加密算法的过程本身是不安全的，所以采用非对称加密算法来保证协商过程的安全性。然而直接使用非对称加密的过程本身也是不安全的，会有中间人篡改公钥的可能，所以客户端与服务端不直接使用公钥，而是使用数字证书签发机构办法的证书来保证非对称加密过程本身的安全。这样通过这些机制协商出一个对称加密算法，就此双方使用这个算法进行加密解密。从而解决了客户端与服务端之间的通信安全问题。</p>
+</blockquote>
+<h4 id="9-进程和线程的概念、区别和通信方式？"><a href="#9-进程和线程的概念、区别和通信方式？" class="headerlink" title="9.进程和线程的概念、区别和通信方式？"></a>9.进程和线程的概念、区别和通信方式？</h4><p>概念：</p>
+<ol>
+<li>进程：进程是指系统资源分配的最小单位，进程使用独立的数据空间</li>
+<li>线程：线程是程序执行的最小单位，同一个进程之内的线程共享数据空间</li>
+</ol>
+<p>区别：</p>
+<blockquote>
+<p>进程实现了操作系统的并发，而线程实现了进程内部的并发；</p>
+<p>线程是进程的子任务，线程是CPU调度的最小单位；</p>
+<p>一个进程至少有一个线程，线程依赖所属的进程而存在。</p>
+</blockquote>
+<p>通信方式：</p>
+<ul>
+<li>进程间的通信有管道、命名管道、信号、消息队列、共享内存、信号量和套接字等</li>
+<li>线程间的同步方式有互斥量、信号量和事件(wait/notify)等</li>
+</ul>
+<h4 id="10-线程的调度方式？"><a href="#10-线程的调度方式？" class="headerlink" title="10.线程的调度方式？"></a>10.线程的调度方式？</h4><ol>
+<li>协同式调度</li>
+<li>抢占式调度</li>
+</ol>
+<h3 id="第五部分-数据库MySQL相关"><a href="#第五部分-数据库MySQL相关" class="headerlink" title="第五部分 数据库MySQL相关"></a>第五部分 数据库MySQL相关</h3><h3 id="第六部分-Spring框架相关"><a href="#第六部分-Spring框架相关" class="headerlink" title="第六部分 Spring框架相关"></a>第六部分 Spring框架相关</h3><blockquote>
+<p>参考资料：[ <a href="https://blog.csdn.net/a745233700/article/details/80959716" target="_blank" rel="noopener">https://blog.csdn.net/a745233700/article/details/80959716</a> ]</p>
+</blockquote>
+<h4 id="1-Spring-Bean的生命周期是怎样的？"><a href="#1-Spring-Bean的生命周期是怎样的？" class="headerlink" title="1.Spring Bean的生命周期是怎样的？"></a>1.Spring Bean的生命周期是怎样的？</h4><h3 id="第七部分-java语言部分"><a href="#第七部分-java语言部分" class="headerlink" title="第七部分 java语言部分"></a>第七部分 java语言部分</h3><h4 id="1-java中的AQS框架原理？"><a href="#1-java中的AQS框架原理？" class="headerlink" title="1.java中的AQS框架原理？"></a>1.java中的AQS框架原理？</h4>
       
     </div>
     
@@ -529,6 +801,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/23/spring源码/" rel="prev" title="spring源码">
+                spring源码 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -607,7 +883,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -618,7 +894,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -629,7 +905,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -678,7 +954,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一部分-java内存模型"><span class="nav-number">1.</span> <span class="nav-text">第一部分 java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-描述一下java内存模型"><span class="nav-number">1.1.</span> <span class="nav-text">1.描述一下java内存模型?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-java中如何保证线程安全？"><span class="nav-number">1.2.</span> <span class="nav-text">2.java中如何保证线程安全？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二部分-Redis数据库"><span class="nav-number">2.</span> <span class="nav-text">第二部分 Redis数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-redis为什么快？"><span class="nav-number">2.1.</span> <span class="nav-text">1.redis为什么快？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-redis如何进行持久化操作？"><span class="nav-number">2.2.</span> <span class="nav-text">2.redis如何进行持久化操作？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-redis如何实现高可用？"><span class="nav-number">2.3.</span> <span class="nav-text">3.redis如何实现高可用？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-redis中数据的缓存淘汰策略？"><span class="nav-number">2.4.</span> <span class="nav-text">4.redis中数据的缓存淘汰策略？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-介绍一下redis的事务机制？"><span class="nav-number">2.5.</span> <span class="nav-text">5.介绍一下redis的事务机制？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-redis集群的工作原理和注意事项？"><span class="nav-number">2.6.</span> <span class="nav-text">6.redis集群的工作原理和注意事项？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一部分-java内存模型"><span class="nav-number">1.</span> <span class="nav-text">第一部分 java内存模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-描述一下java内存模型"><span class="nav-number">1.1.</span> <span class="nav-text">1.描述一下java内存模型?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-java中如何保证线程安全？"><span class="nav-number">1.2.</span> <span class="nav-text">2.java中如何保证线程安全？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二部分-Redis数据库"><span class="nav-number">2.</span> <span class="nav-text">第二部分 Redis数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-redis为什么快？"><span class="nav-number">2.1.</span> <span class="nav-text">1.redis为什么快？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-redis如何进行持久化操作？"><span class="nav-number">2.2.</span> <span class="nav-text">2.redis如何进行持久化操作？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-redis如何实现高可用？"><span class="nav-number">2.3.</span> <span class="nav-text">3.redis如何实现高可用？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-redis中数据的缓存淘汰策略？"><span class="nav-number">2.4.</span> <span class="nav-text">4.redis中数据的缓存淘汰策略？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-介绍一下redis的事务机制？"><span class="nav-number">2.5.</span> <span class="nav-text">5.介绍一下redis的事务机制？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-redis集群的工作原理和注意事项？"><span class="nav-number">2.6.</span> <span class="nav-text">6.redis集群的工作原理和注意事项？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三部分-java虚拟机和GC相关"><span class="nav-number">3.</span> <span class="nav-text">第三部分 java虚拟机和GC相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-JDK1-8的运行时数据区域？"><span class="nav-number">3.1.</span> <span class="nav-text">1.JDK1.8的运行时数据区域？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-垃圾回收的过程是怎样的？"><span class="nav-number">3.2.</span> <span class="nav-text">2.垃圾回收的过程是怎样的？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-常见的垃圾回收器和搭配？"><span class="nav-number">3.3.</span> <span class="nav-text">3.常见的垃圾回收器和搭配？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-类的加载过程是怎样的？"><span class="nav-number">3.4.</span> <span class="nav-text">4.类的加载过程是怎样的？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四部分-计算机基础和网络"><span class="nav-number">4.</span> <span class="nav-text">第四部分 计算机基础和网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-当在浏览器中输入一个网址之后发生了什么？"><span class="nav-number">4.1.</span> <span class="nav-text">1.当在浏览器中输入一个网址之后发生了什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-TCP连接建立和解除的过程？"><span class="nav-number">4.2.</span> <span class="nav-text">2.TCP连接建立和解除的过程？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-OSI七层协议每一层的功能？"><span class="nav-number">4.3.</span> <span class="nav-text">3.OSI七层协议每一层的功能？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-TCP和UDP的区别？"><span class="nav-number">4.4.</span> <span class="nav-text">4.TCP和UDP的区别？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-一次完整的HTTP请求所经历的七个步骤？"><span class="nav-number">4.5.</span> <span class="nav-text">5.一次完整的HTTP请求所经历的七个步骤？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-GET和POST请求的区别？"><span class="nav-number">4.6.</span> <span class="nav-text">6.GET和POST请求的区别？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-HTTP和HTTPS的关系和区别是什么？"><span class="nav-number">4.7.</span> <span class="nav-text">7.HTTP和HTTPS的关系和区别是什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-HTTPS实现的原理？"><span class="nav-number">4.8.</span> <span class="nav-text">8.HTTPS实现的原理？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-进程和线程的概念、区别和通信方式？"><span class="nav-number">4.9.</span> <span class="nav-text">9.进程和线程的概念、区别和通信方式？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-线程的调度方式？"><span class="nav-number">4.10.</span> <span class="nav-text">10.线程的调度方式？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五部分-数据库MySQL相关"><span class="nav-number">5.</span> <span class="nav-text">第五部分 数据库MySQL相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第六部分-Spring框架相关"><span class="nav-number">6.</span> <span class="nav-text">第六部分 Spring框架相关</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Spring-Bean的生命周期是怎样的？"><span class="nav-number">6.1.</span> <span class="nav-text">1.Spring Bean的生命周期是怎样的？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第七部分-java语言部分"><span class="nav-number">7.</span> <span class="nav-text">第七部分 java语言部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-java中的AQS框架原理？"><span class="nav-number">7.1.</span> <span class="nav-text">1.java中的AQS框架原理？</span></a></li></ol></li></ol></div>
             
 
           </div>
