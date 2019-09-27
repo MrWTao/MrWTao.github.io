@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="小涛的博客">
 <meta property="og:description" content="第一部分 java内存模型1.描述一下java内存模型? java虚拟机规范中定义了一种java内存模型JMM用来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让java程序在各种平台下都能达到一致的内存访问效果。 java内存模型的主要目标是定义程序各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F">
-<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/blog/source/_posts/java面试题整理/类加载的过程.png">
-<meta property="og:updated_time" content="2019-09-26T09:20:35.338Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/20/java面试题整理/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E8%BF%87%E7%A8%8B.png">
+<meta property="og:updated_time" content="2019-09-26T12:57:31.697Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java面试题整理">
 <meta name="twitter:description" content="第一部分 java内存模型1.描述一下java内存模型? java虚拟机规范中定义了一种java内存模型JMM用来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让java程序在各种平台下都能达到一致的内存访问效果。 java内存模型的主要目标是定义程序各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。">
-<meta name="twitter:image" content="http://yoursite.com/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/20/java面试题整理/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png">
 
 
 
@@ -515,7 +515,7 @@
 <p>取代了1.7以前的永久代，作为虚拟机规范的方法区的实现，存放虚拟机加载的类信息、静态变量、常量等数据。</p>
 <p>(6).直接内存</p>
 <p>NIO使用的内存区域。</p>
-<p><img src="/2019/09/20/java面试题整理/D:%5Cblog%5Csource_posts%5Cjava%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86%5CJVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F" alt="1569467692660"></p>
+<p><img src="/2019/09/20/java面试题整理/JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F.png" alt="avatar"></p>
 <h4 id="2-垃圾回收的过程是怎样的？"><a href="#2-垃圾回收的过程是怎样的？" class="headerlink" title="2.垃圾回收的过程是怎样的？"></a>2.垃圾回收的过程是怎样的？</h4><p>垃圾回收机制的存在就是为了自动的回收JVM管理的内存区域中不再使用的对象。主要考虑的因素有三个：</p>
 <ol>
 <li>JVM如何确定哪些对象需要被回收？</li>
@@ -580,8 +580,7 @@
 <h4 id="4-类的加载过程是怎样的？"><a href="#4-类的加载过程是怎样的？" class="headerlink" title="4.类的加载过程是怎样的？"></a>4.类的加载过程是怎样的？</h4><blockquote>
 <p>类从被加载到虚拟机内存开始，到卸载出内存位置，它的整个生命周期包括：加载、验证、准备、解析、初始化、使用和卸载7个阶段，其中验证、准备、解析3个部分称为连接。</p>
 </blockquote>
-<img src="/2019/09/20/java面试题整理/blog\source\_posts\java面试题整理\类加载的过程.png" alt="1569373730786" style="zoom: 80%;">
-
+<p><img src="/2019/09/20/java面试题整理/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E8%BF%87%E7%A8%8B.png" alt="avatar"></p>
 <p>首先，虚拟机是如何判断何时该加载类呢，在这里虚拟机规范并没有严格的规定何时加载类，不过对于初始化阶段，则是严格的指出只有5种情况必须立即对类进行初始化：</p>
 <ol>
 <li>遇到new、getstatic、putstatic或invokestatic这四条字节码指令时，如果类没有进行初始化则需要先触发初始化过程。对应到java场景中就是使用new关键字实例化类的对象、读取或设置一个类的静态变量(不能被final修饰)和调用一个类的静态方法的时候；</li>
